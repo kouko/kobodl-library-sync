@@ -1,0 +1,13 @@
+# Credentials and Config
+kobodl.json
+
+# Binaries
+kobodl-macos
+
+# Downloads
+kobo_downloads/
+*.epub
+*.pdf
+
+# System
+.DS_Store
