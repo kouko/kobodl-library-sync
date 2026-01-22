@@ -12,7 +12,7 @@
 ## 系統需求
 
 - macOS (本腳本專為 macOS 設計)
-- **Calibre** (選用)：若需要轉檔功能，請先安裝 Calibre。
+- **Calibre** (選用)：若需要轉檔功能，請先安裝 Calibre (官方下載：[https://calibre-ebook.com/download_osx](https://calibre-ebook.com/download_osx))。
 
 ## 安裝與使用
 
@@ -31,6 +31,58 @@ mkdir -p ~/KobodlLibrarySync && curl -L -o ~/KobodlLibrarySync/kobodl-library-sy
 ```bash
 ~/KobodlLibrarySync/kobodl-library-sync.sh
 ```
+
+### 自動排程 (Daily Automation)
+
+若希望每天自動執行一次同步（電腦需開機或休眠喚醒後自動補跑），請複製貼上以下整段指令：
+
+```bash
+# 1. 建立 LaunchAgents 資料夾 (如果不存在)
+mkdir -p ~/Library/LaunchAgents
+
+# 2. 建立排程設定檔 (每天執行一次)
+cat <<EOF > ~/Library/LaunchAgents/com.kouko.kobodl-library-sync.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.kouko.kobodl-library-sync</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$HOME/KobodlLibrarySync/kobodl-library-sync.sh</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>86400</integer>
+    <key>StandardOutPath</key>
+    <string>/tmp/kobodl-library-sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/kobodl-library-sync.error.log</string>
+</dict>
+</plist>
+EOF
+
+# 3. 載入排程
+launchctl unload ~/Library/LaunchAgents/com.kouko.kobodl-library-sync.plist 2>/dev/null
+launchctl load ~/Library/LaunchAgents/com.kouko.kobodl-library-sync.plist
+
+echo "✅ 排程設定完成！"
+```
+
+### 解除自動排程 (Remove Automation)
+
+若不再需要自動執行，請執行以下指令解除：
+
+```bash
+# 1. 卸載排程
+launchctl unload ~/Library/LaunchAgents/com.kouko.kobodl-library-sync.plist 2>/dev/null
+
+# 2. 刪除設定檔
+rm ~/Library/LaunchAgents/com.kouko.kobodl-library-sync.plist
+
+echo "✅ 排程已解除"
+```
+
 
 
 ### 首次登入
