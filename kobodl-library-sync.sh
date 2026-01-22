@@ -214,5 +214,11 @@ while IFS= read -r full_id; do
     fi
 done <<< "$REMOTE_LIST"
 
+# 4. 如果是互動模式 (Terminal)，執行結束後開啟資料夾
+if [ -t 1 ]; then
+    echo "📂 正在開啟下載資料夾..."
+    open "$DOWNLOAD_DIR"
+fi
+
 echo "🎉 作業結束！"
 exit 0
