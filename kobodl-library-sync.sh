@@ -3,14 +3,30 @@
 # ========================================================
 # 設定區
 # ========================================================
-BINARY_NAME="kobodl-macos"
+# ========================================================
+# 設定區
+# ========================================================
+# 取得 Script 所在目錄 (確保在任何位置執行都能正確參照)
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Runtime 目錄設定
+BIN_DIR="$BASE_DIR/bin"
+CONFIG_DIR="$BASE_DIR/config"
+DOWNLOAD_DIR="$BASE_DIR/downloads"  # 指定書籍儲存資料夾
+
+# 檔案路徑設定
+BINARY_NAME="$BIN_DIR/kobodl-macos"
+CONFIG_FILE="$CONFIG_DIR/kobodl.json"
+OUTPUT_DIR="$DOWNLOAD_DIR"
+
 DOWNLOAD_URL="https://github.com/subdavis/kobo-book-downloader/releases/latest/download/kobodl-macos"
 CONVERTER="/Applications/calibre.app/Contents/MacOS/ebook-convert"
-OUTPUT_DIR="kobo_downloads"  # 指定書籍儲存資料夾
-CONFIG_FILE="kobodl.json"    # 指定設定檔名稱
 
-# 設定執行指令 (包含 config 參數)
-CMD="./$BINARY_NAME --config $CONFIG_FILE"
+# 設定執行指令
+CMD="$BINARY_NAME --config $CONFIG_FILE"
+
+# 確保 Runtime 目錄存在
+mkdir -p "$BIN_DIR" "$CONFIG_DIR" "$DOWNLOAD_DIR"
 
 # ========================================================
 # 階段一：環境檢查與工具準備
@@ -19,7 +35,7 @@ echo "=============================================================="
 echo "🛠️  環境檢查與工具準備"
 echo "    1. kobodl (下載 Kobo 電子書 & 處理 DRM 的工具)"  
 echo "       - 原始專案位置： https://github.com/subdavis/kobo-book-downloader"
-echo "       - 此 Script 會自動下載執行檔並保存在當前資料夾"
+echo "       - 此 Script 會自動下載執行檔並保存在 bin/ 資料夾"
 echo " "
 echo "    2. calibre (ePub 管理與瀏覽工具，當前用於 ePub 轉換 PDF)" 
 echo "       - 原始專案位置： https://calibre-ebook.com/zh_TW/download_osx"          
@@ -31,7 +47,7 @@ echo " "
 echo "--------------------------------------------------------------"
 echo " "
 echo "🛠️  登入與驗證 kobo 帳號"
-echo "    - kobo 登入資訊會儲存在與 script 相同資料夾的 kobodl.json 檔案內" 
+echo "    - kobo 登入資訊會儲存在 config/kobodl.json 檔案內" 
 echo "    - 如無該檔案，或該檔案內沒有登入資訊，會觸發登入流程"
 echo "    - 登入流程模擬 Android kobo Reader App，流程為："
 echo "       1. 此 Script 會提示使用者進入 kobo 頁面輸入指定的六位數字，例如： "
@@ -40,7 +56,7 @@ echo "       2. 使用瀏覽器到 https://www.kobo.com/activate 網頁"
 echo "       3. 在該網頁登入 kobo 帳號"
 echo "       4. 輸入指定的六位數字"
 echo "       5. 此 Script 會自動偵測上述動作是否完成，完成後將登入資訊記錄在"
-echo "          與 script 相同資料夾的 kobodl.json 檔案內"
+echo "          config/kobodl.json 檔案內"
 echo " "
 echo "=============================================================="
 echo " "
