@@ -13,6 +13,7 @@ BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 BIN_DIR="$BASE_DIR/bin"
 CONFIG_DIR="$BASE_DIR/config"
 DOWNLOAD_DIR="$BASE_DIR/downloads"  # 指定書籍儲存資料夾
+TMP_DIR="$BASE_DIR/tmp"            # 本地暫存目錄 (解決 PYI-1270 錯誤)
 
 # 檔案路徑設定
 BINARY_NAME="$BIN_DIR/kobodl-macos"
@@ -22,11 +23,14 @@ OUTPUT_DIR="$DOWNLOAD_DIR"
 DOWNLOAD_URL="https://github.com/subdavis/kobo-book-downloader/releases/latest/download/kobodl-macos"
 CONVERTER="/Applications/calibre.app/Contents/MacOS/ebook-convert"
 
+# 設定 PyInstaller 暫存環境變數
+export TMPDIR="$TMP_DIR"
+
 # 設定執行指令
 CMD="$BINARY_NAME --config $CONFIG_FILE"
 
 # 確保 Runtime 目錄存在
-mkdir -p "$BIN_DIR" "$CONFIG_DIR" "$DOWNLOAD_DIR"
+mkdir -p "$BIN_DIR" "$CONFIG_DIR" "$DOWNLOAD_DIR" "$TMP_DIR"
 
 # ========================================================
 # 階段一：環境檢查與工具準備

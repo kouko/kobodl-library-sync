@@ -2,6 +2,7 @@
 bin/
 config/
 downloads/
+tmp/
 
 # Generated Files (Legacy/Root)
 kobodl.json
